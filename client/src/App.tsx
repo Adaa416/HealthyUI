@@ -2,18 +2,34 @@ import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useParams, useNavigate } from "react-router-dom";
 import axios from 'axios';
 
+interface Thumbnail {
+  url: string;
+  width: number;
+  height: number;
+}
+
+interface Thumbnails {
+  default: Thumbnail;
+  medium: Thumbnail;
+  high: Thumbnail;
+}
+
 interface Video {
   videoId: string;
   snippet: { title: string };
 }
 
+
 interface VideoDetails {
   videoId: string;
   snippet: {
     title: string;
+    thumbnails: Thumbnails;
   };
   relatedVideos: Video[];
+  similarVideos: Video[];
 }
+
 
 const relatedVideosMap: { [key: string]: Video[] } = {
   '0PJeUvSlH0Y': [
@@ -34,6 +50,49 @@ const relatedVideosMap: { [key: string]: Video[] } = {
   // ...add more mappings as needed
 };
 
+const similarVideosMap: { [key: string]: Video[] } = {
+  '0PJeUvSlH0Y': [
+    { videoId: 'XbwYkFcPmog', snippet: { title: 'Similar Video A1' } },
+    { videoId: 'prMM6ki70OE', snippet: { title: 'Similar Video A2' } },
+    { videoId: 'uigtClFQDm0', snippet: { title: 'Similar Video A3' } },
+  ],
+  'Ho9em79_0qg': [
+    { videoId: 'RL35w30H6Hc', snippet: { title: 'Video B1' } },
+    { videoId: 'fZlvvMJJ2Sw', snippet: { title: 'Video B2' } },
+    { videoId: 'ES7GLGfXwBE', snippet: { title: 'Video B3' } },
+  ],
+  'lSPTbJVxdjQ': [
+    { videoId: 'c1', snippet: { title: 'Video C1' } },
+    { videoId: 'c2', snippet: { title: 'Video C2' } },
+    { videoId: 'c3', snippet: { title: 'Video C3' } },
+  ],
+  // ...add more mappings as needed
+};
+
+
+async function fetchRelatedVideoDetails(video: Video): Promise<Video | null> {
+  try {
+    const response = await axios.get(
+      `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${video.videoId}&key=AIzaSyAjpGOlI45TjR_qYgNF6qjvagM6v1zdNi4`
+    );
+
+    if (response.data.items.length === 0) {
+      console.error(`No video found for ID ${video.videoId}`);
+      return null;
+    }
+
+    // Return the fetched video details
+    return {
+      videoId: response.data.items[0].id,
+      snippet: response.data.items[0].snippet,
+    };
+  } catch (error) {
+    console.error(`Error fetching video with ID ${video.videoId}:`, error);
+    return null;
+  }
+}
+
+
 async function fetchVideoDetails(videoId: string): Promise<VideoDetails | null> {
   try {
     const response = await axios.get(
@@ -45,18 +104,27 @@ async function fetchVideoDetails(videoId: string): Promise<VideoDetails | null> 
       return null;
     }
 
-    const relatedVideos = relatedVideosMap[videoId] || [];
+    // Fetch details for related and similar videos
+    const relatedVideosPromise = Promise.all((relatedVideosMap[videoId] || []).map(fetchRelatedVideoDetails));
+    const similarVideosPromise = Promise.all((similarVideosMap[videoId] || []).map(fetchRelatedVideoDetails));
+
+    const relatedVideos = (await relatedVideosPromise).filter((video): video is Video => video !== null);
+    const similarVideos = (await similarVideosPromise).filter((video): video is Video => video !== null);
 
     return {
       videoId: response.data.items[0].id,
       snippet: response.data.items[0].snippet,
-      relatedVideos: relatedVideos,
+      relatedVideos,
+      similarVideos,
     };
   } catch (error) {
     console.error(`Error fetching video with ID ${videoId}:`, error);
     return null;
   }
 }
+
+
+
 
 
 function Home({ videoDetails, setVideoDetails }: { videoDetails: VideoDetails[]; setVideoDetails: React.Dispatch<React.SetStateAction<VideoDetails[]>> }) {
@@ -168,27 +236,47 @@ function Video({ videoDetails, setVideoDetails }: { videoDetails: VideoDetails[]
           allowFullScreen
         ></iframe>
       </div>
-      <VideoList videos={videoDetail.relatedVideos} />
+      <div style={{ marginLeft: '20px', width: '400px' }}>
+        <VideoList title="Related Videos" videos={videoDetail.relatedVideos} />
+        <VideoList title="Similar Videos" videos={videoDetail.similarVideos} />
+      </div>
     </div>
   );
 }
 
-function VideoList({ videos }: { videos: Video[] }) {
+
+
+function VideoList({ title, videos }: { title: string, videos: Video[] }) {
   return (
     <div>
-      <h2>Related Videos</h2>
+      <h2>{title}</h2>
       {videos.map((video, index) => (
         <div key={index}>
-          <Link to={`/video/${video.videoId}`}>{video.snippet.title}</Link>
+          <Link to={`/video/${video.videoId}`}>
+            <p>{video.snippet.title}</p>
+          </Link>
+          <div>
+            <iframe
+              width="500"
+              height="280"
+              src={`https://www.youtube.com/embed/${video.videoId}`}
+              title={`YouTube video ${index + 1}`}
+              frameBorder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            ></iframe>
+          </div>
         </div>
       ))}
     </div>
   );
 }
 
+
+
+
 function App() {
   const [videoDetails, setVideoDetails] = useState<VideoDetails[]>([]);
-
   return (
     <Router>
       <Routes>
