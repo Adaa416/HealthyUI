@@ -176,10 +176,10 @@ function Home({ videoDetails, setVideoDetails }: { videoDetails: VideoDetails[];
 function SearchBar({ setVideoDetails }: { setVideoDetails: React.Dispatch<React.SetStateAction<VideoDetails[]>> }) {
   const [input, setInput] = React.useState("");
 
-  const searchVideos = async () => {
+  const searchVideos = async (keyword = input) => {
     try {
       const response = await axios.get(
-        `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=${input}&key=AIzaSyAjpGOlI45TjR_qYgNF6qjvagM6v1zdNi4`
+        `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&q=${keyword}&key=AIzaSyAjpGOlI45TjR_qYgNF6qjvagM6v1zdNi4`
       );
       setVideoDetails(response.data.items.map((item: any) => ({
         videoId: item.id.videoId,
@@ -191,40 +191,82 @@ function SearchBar({ setVideoDetails }: { setVideoDetails: React.Dispatch<React.
     }
   };
 
+  // Example keyword list
+  const keywords = ["Lost Weight", "Diet Plan", "Extreme Sports"];
+
   return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '30vh'}}>
-      <input 
-        type="text" 
-        value={input} 
-        onChange={(e) => setInput(e.target.value)}
-        style={{
-          backgroundImage: `url(${SearchBox})`, 
-          backgroundSize: 'cover', // or use 'cover', or specify a length or a percentage
-          backgroundRepeat: 'no-repeat',
-          color: 'black', // assuming the image is dark
-          border: 'none',
-          height: '30%',
-          width: '30%',
-          padding: '0.2%',
-          fontSize: '30px'
-        }} 
-      />
-      <button 
-    onClick={searchVideos}
-    style={{
-      backgroundImage: `url(${Search})`, 
-      backgroundSize: 'cover', // or use 'cover', or specify a length or a percentage
-      backgroundRepeat: 'no-repeat',
-      border: 'none',
-      height: '32.5%',
-      width: '6.5%',
-    }} 
-/>
+    <div>
+      <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        height: '30vh',
+        flexWrap: 'nowrap' // added this line
+      }}>
+        <input 
+          type="text" 
+          value={input} 
+          onChange={(e) => setInput(e.target.value)}
+          style={{
+            backgroundImage: `url(${SearchBox})`, 
+            backgroundSize: 'cover', // or use 'cover', or specify a length or a percentage
+            backgroundRepeat: 'no-repeat',
+            color: 'black', // assuming the image is dark
+            border: 'none',
+            height: '30%',
+            width: '30%',
+            padding: '0.2%',
+            fontSize: '30px',
+            flexShrink: 0 // added this line
+          }} 
+        />
+        <button 
+          onClick={() => searchVideos()}
+          style={{
+            backgroundImage: `url(${Search})`, 
+            backgroundSize: 'cover', // or use 'cover', or specify a length or a percentage
+            backgroundRepeat: 'no-repeat',
+            border: 'none',
+            height: '32.5%',
+            width: '6.5%',
+            flexShrink: 0 // added this line
+          }} 
+        />
+      </div>
 
-
+      <div style={{
+        display: 'flex', 
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+        marginTop: '0.1%',
+        marginBottom: '4%'
+      }}>
+        {keywords.map((keyword) => (
+          <button 
+            onClick={() => searchVideos(keyword)} 
+            style={{
+              margin: '0 1%',
+              padding: '1% 1%', // padding to increase button size
+              fontSize: '100%', // font size increase for better visibility
+              borderRadius: '19%', // optional: rounds the corners of the button
+            }}
+          >
+            {keyword}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -295,8 +337,8 @@ function Video({ videoDetails, setVideoDetails }: { videoDetails: VideoDetails[]
       {/* Display related and similar videos when showInfo is true */}
       {showInfo && (
         <div style={{ marginLeft: '20px', width: '800px' }}>
-          <VideoList title="Related Videos" videos={videoDetail.relatedVideos} />
-          <VideoList title="Similar Videos" videos={videoDetail.similarVideos} />
+          <VideoList title="Video Contains Opposite Opinion..." videos={videoDetail.relatedVideos} />
+          <VideoList title="Similar Video With Moderation..." videos={videoDetail.similarVideos} />
         </div>
       )}
     </div>
