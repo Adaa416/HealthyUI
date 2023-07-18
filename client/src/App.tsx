@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useParams, useNavigate } from "react-router-dom";
 import axios from 'axios';
+import SearchBox from './Search box L.png';
+import Search from './Search1.png';
+import MoreInfo from './MoreInfo.png';
+
+
 
 interface Thumbnail {
   url: string;
@@ -125,8 +130,6 @@ async function fetchVideoDetails(videoId: string): Promise<VideoDetails | null> 
 
 
 
-
-
 function Home({ videoDetails, setVideoDetails }: { videoDetails: VideoDetails[]; setVideoDetails: React.Dispatch<React.SetStateAction<VideoDetails[]>> }) {
   const videoIds = ['0PJeUvSlH0Y', 'Ho9em79_0qg', 'lSPTbJVxdjQ']; // Array of video IDs
 
@@ -138,32 +141,37 @@ function Home({ videoDetails, setVideoDetails }: { videoDetails: VideoDetails[];
 
   return (
     <div>
-      <h1>Welcome to YouTube!</h1>
+      
       <SearchBar setVideoDetails={setVideoDetails} />
 
-      {videoDetails.map((video, index) => (
-        <div key={index}>
-          <h2>
-            <Link to={`/video/${video.videoId}`}>
-              {video.snippet.title}
-            </Link>
-          </h2>
-          <div>
-            <iframe
-              width="560"
-              height="315"
-              src={`https://www.youtube.com/embed/${video.videoId}`}
-              title={`YouTube video player ${index + 1}`}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
+      <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+        {videoDetails.map((video, index) => (
+          <div key={index} style={{ flexBasis: '32%', marginBottom: '20px' }}>
+            <h2 style={{ wordWrap: 'break-word', marginBottom: '10px' }}>
+              <Link to={`/video/${video.videoId}`}>
+                {video.snippet.title}
+              </Link>
+            </h2>
+            <div>
+              <iframe
+                width="100%"
+                height="315"
+                src={`https://www.youtube.com/embed/${video.videoId}`}
+                title={`YouTube video player ${index + 1}`}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
+
+
+
 
 function SearchBar({ setVideoDetails }: { setVideoDetails: React.Dispatch<React.SetStateAction<VideoDetails[]>> }) {
   const [input, setInput] = React.useState("");
@@ -184,17 +192,48 @@ function SearchBar({ setVideoDetails }: { setVideoDetails: React.Dispatch<React.
   };
 
   return (
-    <div>
-      <input type="text" value={input} onChange={(e) => setInput(e.target.value)} />
-      <button onClick={searchVideos}>Search</button>
+    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '30vh'}}>
+      <input 
+        type="text" 
+        value={input} 
+        onChange={(e) => setInput(e.target.value)}
+        style={{
+          backgroundImage: `url(${SearchBox})`, 
+          backgroundSize: 'cover', // or use 'cover', or specify a length or a percentage
+          backgroundRepeat: 'no-repeat',
+          color: 'black', // assuming the image is dark
+          border: 'none',
+          height: '30%',
+          width: '30%',
+          padding: '0.2%',
+          fontSize: '30px'
+        }} 
+      />
+      <button 
+    onClick={searchVideos}
+    style={{
+      backgroundImage: `url(${Search})`, 
+      backgroundSize: 'cover', // or use 'cover', or specify a length or a percentage
+      backgroundRepeat: 'no-repeat',
+      border: 'none',
+      height: '32.5%',
+      width: '6.5%',
+    }} 
+/>
+
+
     </div>
   );
 }
+
+
+
 
 function Video({ videoDetails, setVideoDetails }: { videoDetails: VideoDetails[]; setVideoDetails: React.Dispatch<React.SetStateAction<VideoDetails[]>> }) {
   const { videoId } = useParams<{ videoId?: string }>();
   const navigate = useNavigate();
   const videoDetail = videoDetails.find((video) => video.videoId === videoId);
+  const [showInfo, setShowInfo] = useState(false); // The state to manage the visibility of the related and similar videos
 
   useEffect(() => {
     if (!videoId) {
@@ -225,24 +264,46 @@ function Video({ videoDetails, setVideoDetails }: { videoDetails: VideoDetails[]
         <div style={{ position: 'fixed', top: '10px', left: '10px' }}>
           <button onClick={goHome}>Home Page</button>
         </div>
-        <h1>{videoDetail.snippet.title}</h1>
-        <iframe
-          width="560"
-          height="315"
-          src={`https://www.youtube.com/embed/${videoId}`}
-          title="YouTube video player"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        ></iframe>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}> {/* added this div */}
+          <h1 style={{ maxWidth: '560px' }}>
+            {videoDetail.snippet.title}
+          </h1>
+          <iframe
+            width="560"
+            height="315"
+            src={`https://www.youtube.com/embed/${videoId}`}
+            title="YouTube video player"
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+          ></iframe>
+          {/* More Information button */}
+          <button 
+            style={{
+              backgroundImage: `url(${MoreInfo})`, 
+              backgroundSize: 'cover',
+              backgroundRepeat: 'no-repeat',
+              border: 'none',
+              height: '33px', 
+              width: '30px', 
+              marginTop: '3%'  // space above the button
+            }}
+            onClick={() => setShowInfo(!showInfo)}
+          />
+        </div>
       </div>
-      <div style={{ marginLeft: '20px', width: '400px' }}>
-        <VideoList title="Related Videos" videos={videoDetail.relatedVideos} />
-        <VideoList title="Similar Videos" videos={videoDetail.similarVideos} />
-      </div>
+      {/* Display related and similar videos when showInfo is true */}
+      {showInfo && (
+        <div style={{ marginLeft: '20px', width: '800px' }}>
+          <VideoList title="Related Videos" videos={videoDetail.relatedVideos} />
+          <VideoList title="Similar Videos" videos={videoDetail.similarVideos} />
+        </div>
+      )}
     </div>
   );
-}
+  
+  
+}  
 
 
 
@@ -250,27 +311,41 @@ function VideoList({ title, videos }: { title: string, videos: Video[] }) {
   return (
     <div>
       <h2>{title}</h2>
-      {videos.map((video, index) => (
-        <div key={index}>
-          <Link to={`/video/${video.videoId}`}>
-            <p>{video.snippet.title}</p>
-          </Link>
-          <div>
-            <iframe
-              width="500"
-              height="280"
-              src={`https://www.youtube.com/embed/${video.videoId}`}
-              title={`YouTube video ${index + 1}`}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            ></iframe>
+      <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'flex-start' }}>
+        {videos.map((video, index) => (
+          <div key={index} style={{ flex: '1 0 30%', maxWidth: '30%', margin: '1%', boxSizing: 'border-box' }}>
+            <Link to={`/video/${video.videoId}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <div style={{ 
+                  fontSize: '16px',
+                  lineHeight: '20px',
+                  height: '60px', /* height is 2x line-height, so it will display 2 lines */
+                  overflow: 'hidden', 
+              }}>
+                {video.snippet.title}
+              </div>
+            </Link>
+            <div>
+              <iframe
+                width="100%"
+                height="auto"
+                src={`https://www.youtube.com/embed/${video.videoId}`}
+                title={`YouTube video ${index + 1}`}
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              ></iframe>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 }
+
+
+
+
+
 
 
 
