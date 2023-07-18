@@ -248,7 +248,7 @@ function SearchBar({ setVideoDetails }: { setVideoDetails: React.Dispatch<React.
               margin: '0 1%',
               padding: '1% 1%', // padding to increase button size
               fontSize: '100%', // font size increase for better visibility
-              borderRadius: '19%', // optional: rounds the corners of the button
+              borderRadius: '20px', // optional: rounds the corners of the button
             }}
           >
             {keyword}
