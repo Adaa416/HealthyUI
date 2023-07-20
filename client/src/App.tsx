@@ -37,40 +37,52 @@ interface VideoDetails {
 
 
 const relatedVideosMap: { [key: string]: Video[] } = {
-  '0PJeUvSlH0Y': [
-    { videoId: 'KyoJYjOZiKU', snippet: { title: 'Video A1' } },
-    { videoId: '2VuUrsD0098', snippet: { title: 'Video A2' } },
-    { videoId: '0HQ3kndnVSQ', snippet: { title: 'Video A3' } },
+  'py5OohZ8AgY': [
+    { videoId: 'eXTiiz99p9o', snippet: { title: 'Video A1' } },
+    { videoId: 'xwTGZ27LNFQ', snippet: { title: 'Video A2' } },
+    { videoId: '9YNF3_SImno', snippet: { title: 'Video A3' } },
   ],
-  'Ho9em79_0qg': [
-    { videoId: 'MLT5MKcbbr4', snippet: { title: 'Video B1' } },
-    { videoId: 'rB6whhKrmxA', snippet: { title: 'Video B2' } },
-    { videoId: 'sR0DLq2lMzU', snippet: { title: 'Video B3' } },
+  'MKd38G338Qw': [
+    { videoId: 'izKLnQgVj54', snippet: { title: 'Video B1' } },
+    { videoId: 'KW-a6Aec8eE', snippet: { title: 'Video B2' } },
+    { videoId: '8EYQ3Txm7Yc', snippet: { title: 'Video B3' } },
   ],
-  'lSPTbJVxdjQ': [
-    { videoId: 'c1', snippet: { title: 'Video C1' } },
-    { videoId: 'c2', snippet: { title: 'Video C2' } },
-    { videoId: 'c3', snippet: { title: 'Video C3' } },
+  'k_smK3zXInE': [
+    { videoId: 'se9iQwLCGxw', snippet: { title: 'Video C1' } },
+    { videoId: 'q6QkN5Mz2xk', snippet: { title: 'Video C2' } },
+    { videoId: 'bdBorupFLzk', snippet: { title: 'Video C3' } },
   ],
+  'vr3CQEjSPdc': [
+    { videoId: 'cP1HhbdBG_c', snippet: { title: 'Video C1' } },
+    { videoId: '4xFaYS-k8r8', snippet: { title: 'Video C2' } },
+    { videoId: 'ikd5aXpciUg', snippet: { title: 'Video C3' } },
+  ],
+  
   // ...add more mappings as needed
 };
 
 const similarVideosMap: { [key: string]: Video[] } = {
-  '0PJeUvSlH0Y': [
-    { videoId: 'XbwYkFcPmog', snippet: { title: 'Similar Video A1' } },
-    { videoId: 'prMM6ki70OE', snippet: { title: 'Similar Video A2' } },
-    { videoId: 'uigtClFQDm0', snippet: { title: 'Similar Video A3' } },
+  'py5OohZ8AgY': [
+    { videoId: 'orh1W0sxCQI', snippet: { title: 'Similar Video A1' } },
+    { videoId: 'hNtHHFQY1Xo&t=1s', snippet: { title: 'Similar Video A2' } },
+    { videoId: 'vr3CQEjSPdc', snippet: { title: 'Similar Video A3' } },
   ],
-  'Ho9em79_0qg': [
-    { videoId: 'RL35w30H6Hc', snippet: { title: 'Video B1' } },
-    { videoId: 'fZlvvMJJ2Sw', snippet: { title: 'Video B2' } },
-    { videoId: 'ES7GLGfXwBE', snippet: { title: 'Video B3' } },
+  'MKd38G338Qw': [
+    { videoId: 'rUuAeto5Qe4', snippet: { title: 'Video B1' } },
+    { videoId: 'q42n27oCOUM', snippet: { title: 'Video B2' } },
+    { videoId: 'DLYb3IgQ1Qk', snippet: { title: 'Video B3' } },
   ],
-  'lSPTbJVxdjQ': [
-    { videoId: 'c1', snippet: { title: 'Video C1' } },
-    { videoId: 'c2', snippet: { title: 'Video C2' } },
-    { videoId: 'c3', snippet: { title: 'Video C3' } },
+  'k_smK3zXInE': [
+    { videoId: 'BCQZ7PT8GSQ', snippet: { title: 'Video C1' } },
+    { videoId: 'sfswUsyqF7U', snippet: { title: 'Video C2' } },
+    { videoId: 'J4l_mLmvHnk', snippet: { title: 'Video C3' } },
   ],
+  'vr3CQEjSPdc': [
+    { videoId: 'ZMjKp5j1Lt8', snippet: { title: 'Video C1' } },
+    { videoId: '3feSPKetkmI', snippet: { title: 'Video C2' } },
+    { videoId: 'bkCK_Bl_fBc', snippet: { title: 'Video C3' } },
+  ],
+
   // ...add more mappings as needed
 };
 
@@ -131,7 +143,7 @@ async function fetchVideoDetails(videoId: string): Promise<VideoDetails | null> 
 
 
 function Home({ videoDetails, setVideoDetails }: { videoDetails: VideoDetails[]; setVideoDetails: React.Dispatch<React.SetStateAction<VideoDetails[]>> }) {
-  const videoIds = ['0PJeUvSlH0Y', 'Ho9em79_0qg', 'lSPTbJVxdjQ']; // Array of video IDs
+  const videoIds = ['py5OohZ8AgY', 'MKd38G338Qw', 'k_smK3zXInE']; // Array of video IDs
 
   useEffect(() => {
     Promise.all(videoIds.map(fetchVideoDetails))
@@ -147,11 +159,6 @@ function Home({ videoDetails, setVideoDetails }: { videoDetails: VideoDetails[];
       <div style={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap' }}>
         {videoDetails.map((video, index) => (
           <div key={index} style={{ flexBasis: '32%', marginBottom: '20px' }}>
-            <h2 style={{ wordWrap: 'break-word', marginBottom: '10px' }}>
-              <Link to={`/video/${video.videoId}`}>
-                {video.snippet.title}
-              </Link>
-            </h2>
             <div>
               <iframe
                 width="100%"
@@ -163,6 +170,11 @@ function Home({ videoDetails, setVideoDetails }: { videoDetails: VideoDetails[];
                 allowFullScreen
               ></iframe>
             </div>
+            <h2 style={{ wordWrap: 'break-word', marginTop: '10px' }}>
+              <Link to={`/video/${video.videoId}`}>
+                {video.snippet.title}
+              </Link>
+            </h2>
           </div>
         ))}
       </div>
@@ -173,8 +185,10 @@ function Home({ videoDetails, setVideoDetails }: { videoDetails: VideoDetails[];
 
 
 
+
 function SearchBar({ setVideoDetails }: { setVideoDetails: React.Dispatch<React.SetStateAction<VideoDetails[]>> }) {
   const [input, setInput] = React.useState("");
+  const [hoveredButton, setHoveredButton] = React.useState<string | null>(null);
 
   const searchVideos = async (keyword = input) => {
     try {
@@ -192,7 +206,7 @@ function SearchBar({ setVideoDetails }: { setVideoDetails: React.Dispatch<React.
   };
 
   // Example keyword list
-  const keywords = ["Lost Weight", "Diet Plan", "Extreme Sports"];
+  const keywords = ["Weight Loss", "Diet Plan", "Extreme Sports", "Healthy Eating", "Body Modification", "Environmentalism", "Technology"];
 
   return (
     <div>
@@ -201,7 +215,7 @@ function SearchBar({ setVideoDetails }: { setVideoDetails: React.Dispatch<React.
         justifyContent: 'center', 
         alignItems: 'center', 
         height: '30vh',
-        flexWrap: 'nowrap' // added this line
+        flexWrap: 'nowrap'
       }}>
         <input 
           type="text" 
@@ -209,27 +223,27 @@ function SearchBar({ setVideoDetails }: { setVideoDetails: React.Dispatch<React.
           onChange={(e) => setInput(e.target.value)}
           style={{
             backgroundImage: `url(${SearchBox})`, 
-            backgroundSize: 'cover', // or use 'cover', or specify a length or a percentage
+            backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
-            color: 'black', // assuming the image is dark
+            color: 'black',
             border: 'none',
             height: '30%',
             width: '30%',
             padding: '0.2%',
             fontSize: '30px',
-            flexShrink: 0 // added this line
+            flexShrink: 0 
           }} 
         />
         <button 
           onClick={() => searchVideos()}
           style={{
             backgroundImage: `url(${Search})`, 
-            backgroundSize: 'cover', // or use 'cover', or specify a length or a percentage
+            backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
             border: 'none',
             height: '32.5%',
             width: '6.5%',
-            flexShrink: 0 // added this line
+            flexShrink: 0
           }} 
         />
       </div>
@@ -243,12 +257,15 @@ function SearchBar({ setVideoDetails }: { setVideoDetails: React.Dispatch<React.
       }}>
         {keywords.map((keyword) => (
           <button 
+            onMouseEnter={() => setHoveredButton(keyword)}
+            onMouseLeave={() => setHoveredButton(null)}
             onClick={() => searchVideos(keyword)} 
             style={{
               margin: '0 1%',
-              padding: '1% 1%', // padding to increase button size
-              fontSize: '100%', // font size increase for better visibility
-              borderRadius: '20px', // optional: rounds the corners of the button
+              padding: '1% 1%',
+              fontSize: '100%',
+              borderRadius: '20px',
+              backgroundColor: hoveredButton === keyword ? 'darkgray' : 'lightgrey'
             }}
           >
             {keyword}
@@ -266,16 +283,17 @@ function SearchBar({ setVideoDetails }: { setVideoDetails: React.Dispatch<React.
 
 
 
-
-
-
-
-
 function Video({ videoDetails, setVideoDetails }: { videoDetails: VideoDetails[]; setVideoDetails: React.Dispatch<React.SetStateAction<VideoDetails[]>> }) {
   const { videoId } = useParams<{ videoId?: string }>();
   const navigate = useNavigate();
   const videoDetail = videoDetails.find((video) => video.videoId === videoId);
   const [showInfo, setShowInfo] = useState(false); // The state to manage the visibility of the related and similar videos
+  const [hoveredButton, setHoveredButton] = useState(false); // The state to manage the hovering state of the MoreInfo button
+
+  // Reset showInfo when videoId changes
+  useEffect(() => {
+    setShowInfo(false);
+  }, [videoId]);
 
   useEffect(() => {
     if (!videoId) {
@@ -306,7 +324,7 @@ function Video({ videoDetails, setVideoDetails }: { videoDetails: VideoDetails[]
         <div style={{ position: 'fixed', top: '10px', left: '10px' }}>
           <button onClick={goHome}>Home Page</button>
         </div>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}> {/* added this div */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
           <h1 style={{ maxWidth: '560px' }}>
             {videoDetail.snippet.title}
           </h1>
@@ -321,17 +339,24 @@ function Video({ videoDetails, setVideoDetails }: { videoDetails: VideoDetails[]
           ></iframe>
           {/* More Information button */}
           <button 
+            onMouseEnter={() => setHoveredButton(true)}
+            onMouseLeave={() => setHoveredButton(false)}
             style={{
-              backgroundImage: `url(${MoreInfo})`, 
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
+              backgroundColor: hoveredButton ? 'darkgrey' : 'lightgrey', 
               border: 'none',
+              borderRadius: '50%', 
               height: '33px', 
-              width: '30px', 
-              marginTop: '3%'  // space above the button
+              width: '33px', 
+              marginTop: '3%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              cursor: 'pointer'
             }}
             onClick={() => setShowInfo(!showInfo)}
-          />
+          >
+            <span style={{fontSize: '24px', position: 'relative', top: '-6px'}}>...</span>
+          </button>
         </div>
       </div>
       {/* Display related and similar videos when showInfo is true */}
@@ -343,9 +368,8 @@ function Video({ videoDetails, setVideoDetails }: { videoDetails: VideoDetails[]
       )}
     </div>
   );
-  
-  
-}  
+}
+
 
 
 
@@ -357,6 +381,17 @@ function VideoList({ title, videos }: { title: string, videos: Video[] }) {
         {videos.map((video, index) => (
           <div key={index} style={{ flex: '1 0 30%', maxWidth: '30%', margin: '1%', boxSizing: 'border-box' }}>
             <Link to={`/video/${video.videoId}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+              <div>
+                <iframe
+                  width="100%"
+                  height="auto"
+                  src={`https://www.youtube.com/embed/${video.videoId}`}
+                  title={`YouTube video ${index + 1}`}
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                ></iframe>
+              </div>
               <div style={{ 
                   fontSize: '16px',
                   lineHeight: '20px',
@@ -366,28 +401,12 @@ function VideoList({ title, videos }: { title: string, videos: Video[] }) {
                 {video.snippet.title}
               </div>
             </Link>
-            <div>
-              <iframe
-                width="100%"
-                height="auto"
-                src={`https://www.youtube.com/embed/${video.videoId}`}
-                title={`YouTube video ${index + 1}`}
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            </div>
           </div>
         ))}
       </div>
     </div>
   );
 }
-
-
-
-
-
 
 
 
