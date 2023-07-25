@@ -52,10 +52,30 @@ const relatedVideosMap: { [key: string]: Video[] } = {
     { videoId: 'q6QkN5Mz2xk', snippet: { title: 'Video C2' } },
     { videoId: 'bdBorupFLzk', snippet: { title: 'Video C3' } },
   ],
+  'RZMKC6KWUC8': [
+    { videoId: 'fcgczCIg5i8', snippet: { title: 'Video C1' } },
+    { videoId: 'le6-pGafpw0', snippet: { title: 'Video C2' } },
+    { videoId: '8lCPwYaE2gA', snippet: { title: 'Video C3' } },
+  ],
+  'c7FMfQJw6Jk': [
+    { videoId: 'AeZhyo2c0wY', snippet: { title: 'Video C1' } },
+    { videoId: 'sx81vcCliFA', snippet: { title: 'Video C2' } },
+    { videoId: '0adeZP6aDQw', snippet: { title: 'Video C3' } },
+  ],
+  'O0yxJH2i0DE': [
+    { videoId: 'bKVsdIkt-FU', snippet: { title: 'Video C1' } },
+    { videoId: 'pU3_S9YgRBc', snippet: { title: 'Video C2' } },
+    { videoId: 'bp6FbmyJ_kc', snippet: { title: 'Video C3' } },
+  ],
   'vr3CQEjSPdc': [
     { videoId: 'cP1HhbdBG_c', snippet: { title: 'Video C1' } },
     { videoId: '4xFaYS-k8r8', snippet: { title: 'Video C2' } },
     { videoId: 'ikd5aXpciUg', snippet: { title: 'Video C3' } },
+  ],
+  'sx81vcCliFA': [
+    { videoId: 'AGWnpwjSCy0', snippet: { title: 'Video C1' } },
+    { videoId: 'bgp7cFApZSI', snippet: { title: 'Video C2' } },
+    { videoId: 'm60146AeQ_g', snippet: { title: 'Video C3' } },
   ],
   
   // ...add more mappings as needed
@@ -77,10 +97,30 @@ const similarVideosMap: { [key: string]: Video[] } = {
     { videoId: 'sfswUsyqF7U', snippet: { title: 'Video C2' } },
     { videoId: 'J4l_mLmvHnk', snippet: { title: 'Video C3' } },
   ],
+  'RZMKC6KWUC8': [
+    { videoId: 'E-ZTAo2m2Fo', snippet: { title: 'Video C1' } },
+    { videoId: 'oH0J0Im0uFk', snippet: { title: 'Video C2' } },
+    { videoId: 'TmR9Dw2NBEY', snippet: { title: 'Video C3' } },
+  ],
+  'c7FMfQJw6Jk': [
+    { videoId: 'HMxlJm8lTLo', snippet: { title: 'Video C1' } },
+    { videoId: 'pSNpO8tNMz0', snippet: { title: 'Video C2' } },
+    { videoId: 'ZTlMZiJoT8g', snippet: { title: 'Video C3' } },
+  ],
+  'O0yxJH2i0DE': [
+    { videoId: 'AeZhyo2c0wY', snippet: { title: 'Video C1' } },
+    { videoId: 'teE-xVO-ljw', snippet: { title: 'Video C2' } },
+    { videoId: 'iDbdXTMnOmE', snippet: { title: 'Video C3' } },
+  ],
   'vr3CQEjSPdc': [
-    { videoId: 'ZMjKp5j1Lt8', snippet: { title: 'Video C1' } },
+    { videoId: 'DeXntM0gCEA', snippet: { title: 'Video C1' } },
     { videoId: '3feSPKetkmI', snippet: { title: 'Video C2' } },
     { videoId: 'bkCK_Bl_fBc', snippet: { title: 'Video C3' } },
+  ],
+  'sx81vcCliFA': [
+    { videoId: 'QQYgCxu988s', snippet: { title: 'Video C1' } },
+    { videoId: 'cyqYN90PPjE', snippet: { title: 'Video C2' } },
+    { videoId: 'JWTVtYEeJic', snippet: { title: 'Video C3' } },
   ],
 
   // ...add more mappings as needed
@@ -143,7 +183,7 @@ async function fetchVideoDetails(videoId: string): Promise<VideoDetails | null> 
 
 
 function Home({ videoDetails, setVideoDetails }: { videoDetails: VideoDetails[]; setVideoDetails: React.Dispatch<React.SetStateAction<VideoDetails[]>> }) {
-  const videoIds = ['py5OohZ8AgY', 'MKd38G338Qw', 'k_smK3zXInE']; // Array of video IDs
+  const videoIds = ['py5OohZ8AgY', 'MKd38G338Qw', 'k_smK3zXInE', 'RZMKC6KWUC8', 'c7FMfQJw6Jk', 'O0yxJH2i0DE']; // Array of video IDs
 
   useEffect(() => {
     Promise.all(videoIds.map(fetchVideoDetails))
@@ -206,7 +246,7 @@ function SearchBar({ setVideoDetails }: { setVideoDetails: React.Dispatch<React.
   };
 
   // Example keyword list
-  const keywords = ["Weight Loss", "Diet Plan", "Extreme Sports", "Healthy Eating", "Body Modification", "Environmentalism", "Technology"];
+  const keywords = ["Weight Loss", "Work-Life Balance", "Plastic Surgery", "Body Modification", "Environmentalism", "Technology Usage"];
 
   return (
     <div>
@@ -288,7 +328,9 @@ function Video({ videoDetails, setVideoDetails }: { videoDetails: VideoDetails[]
   const navigate = useNavigate();
   const videoDetail = videoDetails.find((video) => video.videoId === videoId);
   const [showInfo, setShowInfo] = useState(false); // The state to manage the visibility of the related and similar videos
-  const [hoveredButton, setHoveredButton] = useState(false); // The state to manage the hovering state of the MoreInfo button
+  const [hoveredMoreInfoButton, setHoveredMoreInfoButton] = useState(false);
+  const [hoveredShareButton, setHoveredShareButton] = useState(false);
+  const [hoveredDownloadButton, setHoveredDownloadButton] = useState(false);
 
   // Reset showInfo when videoId changes
   useEffect(() => {
@@ -337,26 +379,70 @@ function Video({ videoDetails, setVideoDetails }: { videoDetails: VideoDetails[]
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           ></iframe>
-          {/* More Information button */}
-          <button 
-            onMouseEnter={() => setHoveredButton(true)}
-            onMouseLeave={() => setHoveredButton(false)}
-            style={{
-              backgroundColor: hoveredButton ? 'darkgrey' : 'lightgrey', 
-              border: 'none',
-              borderRadius: '50%', 
-              height: '33px', 
-              width: '33px', 
-              marginTop: '3%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              cursor: 'pointer'
-            }}
-            onClick={() => setShowInfo(!showInfo)}
-          >
-            <span style={{fontSize: '24px', position: 'relative', top: '-6px'}}>...</span>
-          </button>
+          <div style={{display: 'flex', flexDirection: 'row'}}>
+            {/* Share button */}
+            <button 
+              onMouseEnter={() => setHoveredShareButton(true)}
+              onMouseLeave={() => setHoveredShareButton(false)}
+              style={{
+                backgroundColor: hoveredShareButton ? 'darkgrey' : 'lightgrey', 
+                border: 'none',
+                borderRadius: '15px',
+                height: '33px', 
+                width: '100px',
+                marginRight: '10px',
+                marginTop: '3%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer'
+              }}
+              onClick={() => {}} // Add functionality here
+            >
+              <span style={{fontSize: '16px'}}>Share</span>
+            </button>
+            {/* Download button */}
+            <button 
+              onMouseEnter={() => setHoveredDownloadButton(true)}
+              onMouseLeave={() => setHoveredDownloadButton(false)}
+              style={{
+                backgroundColor: hoveredDownloadButton ? 'darkgrey' : 'lightgrey', 
+                border: 'none',
+                borderRadius: '15px',
+                height: '33px', 
+                width: '100px',
+                marginRight: '10px',
+                marginTop: '3%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer'
+              }}
+              onClick={() => {}} // Add functionality here
+            >
+              <span style={{fontSize: '16px'}}>Download</span>
+            </button>
+            {/* More Information button */}
+            <button 
+              onMouseEnter={() => setHoveredMoreInfoButton(true)}
+              onMouseLeave={() => setHoveredMoreInfoButton(false)}
+              style={{
+                backgroundColor: hoveredMoreInfoButton ? 'darkgrey' : 'lightgrey', 
+                border: 'none',
+                borderRadius: '15px',
+                height: '33px', 
+                width: '100px',
+                marginTop: '3%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer'
+              }}
+              onClick={() => setShowInfo(!showInfo)}
+            >
+              <span style={{fontSize: '16px', fontWeight: 'bold'}}>MoreInfo</span>
+            </button>
+          </div>
         </div>
       </div>
       {/* Display related and similar videos when showInfo is true */}
