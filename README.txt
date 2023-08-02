@@ -1,1 +1,3 @@
-Hello world
+The primary objective of this project is to shift the viewer's experience of YouTube video content from exposure to extreme ideologies towards a more balanced, moderate perspective. This shift is achieved through the strategic implementation of various user interface elements and tactics. Our focus is on minimizing the negative impacts and promoting healthier interactions on the platform. 
+
+In essence, our objective is to mitigate the potential harm caused by the propagation of misinformation in video content. Our solution involves constructing a video interface similar to YouTube's, but with critical adjustments designed to foster healthier user interactions and consumption habits. The primary goal of this strategy is to prevent the spread of extreme and inaccurate content that could pose risks to an individual's physical or mental health. 
