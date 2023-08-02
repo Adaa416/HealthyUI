@@ -440,7 +440,7 @@ function Video({ videoDetails, setVideoDetails }: { videoDetails: VideoDetails[]
               }}
               onClick={() => setShowInfo(!showInfo)}
             >
-              <span style={{fontSize: '16px', fontWeight: 'bold'}}>MoreInfo</span>
+              <span style={{fontSize: '16px', fontWeight: 'bold'}}>MoreInfo ▶ </span>
             </button>
           </div>
         </div>
